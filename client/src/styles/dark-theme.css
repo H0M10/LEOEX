@@ -1,0 +1,271 @@
+/* Dark Theme CSS - Mejoras de contraste y legibilidad */
+
+/* Variables de colores para tema oscuro */
+:root {
+  --dark-bg-primary: #0f1419;
+  --dark-bg-secondary: #1a1f3a;
+  --dark-bg-accent: #2d1b69;
+  --dark-text-primary: #ffffff;
+  --dark-text-secondary: #e0e6ff;
+  --dark-text-muted: #8892b0;
+  --dark-accent: #3aa0ff;
+  --dark-border: rgba(255,255,255,0.2);
+  --dark-glass-bg: rgba(255,255,255,0.1);
+  --dark-glass-border: rgba(255,255,255,0.2);
+}
+
+/* Estilos globales para formularios en tema oscuro */
+.dark-theme .form-control {
+  background: var(--dark-glass-bg) !important;
+  border: 1px solid var(--dark-glass-border) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+.dark-theme .form-control::placeholder {
+  color: rgba(255,255,255,0.6) !important;
+}
+
+.dark-theme .form-control:focus {
+  background: var(--dark-glass-bg) !important;
+  border-color: var(--dark-accent) !important;
+  box-shadow: 0 0 0 0.2rem rgba(58,160,255,0.25) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+.dark-theme .form-select {
+  background: var(--dark-glass-bg) !important;
+  border: 1px solid var(--dark-glass-border) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+.dark-theme .form-select option {
+  background: var(--dark-bg-secondary) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+/* Estilos para las etiquetas de los formularios */
+.dark-theme .form-label {
+  color: var(--dark-text-primary) !important;
+  font-weight: 500;
+}
+
+/* Tarjetas con mejor contraste */
+.dark-theme .card {
+  background: var(--dark-glass-bg) !important;
+  border: 1px solid var(--dark-glass-border) !important;
+  backdrop-filter: blur(10px) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+.dark-theme .card-header {
+  background: rgba(58,160,255,0.2) !important;
+  border-bottom: 1px solid var(--dark-glass-border) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+/* Tablas mejoradas */
+.dark-theme .table {
+  --bs-table-bg: transparent !important;
+  --bs-table-striped-bg: rgba(255,255,255,0.05) !important;
+  --bs-table-hover-bg: rgba(58,160,255,0.1) !important;
+  --bs-table-border-color: var(--dark-border) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+.dark-theme .table th {
+  background: rgba(58,160,255,0.2) !important;
+  color: var(--dark-text-primary) !important;
+  border-color: var(--dark-border) !important;
+}
+
+.dark-theme .table td {
+  color: var(--dark-text-primary) !important;
+  border-color: var(--dark-border) !important;
+}
+
+/* Botones mejorados */
+.dark-theme .btn-outline-light:hover {
+  color: var(--dark-bg-primary) !important;
+  background-color: var(--dark-text-primary) !important;
+}
+
+.dark-theme .btn-outline-primary {
+  border-color: var(--dark-accent) !important;
+  color: var(--dark-accent) !important;
+}
+
+.dark-theme .btn-outline-primary:hover {
+  background-color: var(--dark-accent) !important;
+  border-color: var(--dark-accent) !important;
+  color: #ffffff !important;
+}
+
+/* Badges mejorados */
+.dark-theme .badge.bg-light {
+  background-color: var(--dark-glass-bg) !important;
+  color: var(--dark-text-primary) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+/* Elementos de texto que puedan tener problemas */
+.dark-theme .text-muted {
+  color: var(--dark-text-muted) !important;
+}
+
+.dark-theme .text-secondary {
+  color: var(--dark-text-secondary) !important;
+}
+
+/* Alerta mejorada */
+.dark-theme .alert-info {
+  background: rgba(58,160,255,0.1) !important;
+  border: 1px solid rgba(58,160,255,0.3) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+/* Barras de progreso */
+.dark-theme .progress {
+  background-color: rgba(255,255,255,0.2) !important;
+}
+
+/* Spinners */
+.dark-theme .spinner-border {
+  border-color: rgba(58,160,255,0.3) !important;
+  border-top-color: var(--dark-accent) !important;
+}
+
+/* Scrollbars personalizados para WebKit */
+.dark-theme ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dark-theme ::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+  background: var(--dark-accent);
+  border-radius: 4px;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: #2c8cd1;
+}
+
+/* Modales mejorados */
+.dark-theme .modal-content {
+  background: var(--dark-bg-primary) !important;
+  border: 1px solid var(--dark-border) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+.dark-theme .modal-header {
+  border-bottom: 1px solid var(--dark-border) !important;
+}
+
+.dark-theme .modal-footer {
+  border-top: 1px solid var(--dark-border) !important;
+}
+
+/* Dropdown mejorado */
+.dark-theme .dropdown-menu {
+  background: var(--dark-bg-secondary) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+.dark-theme .dropdown-item {
+  color: var(--dark-text-primary) !important;
+}
+
+.dark-theme .dropdown-item:hover {
+  background: rgba(58,160,255,0.2) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+/* Navbar mejorado */
+.dark-theme .navbar-dark .navbar-nav .nav-link {
+  color: var(--dark-text-primary) !important;
+}
+
+.dark-theme .navbar-dark .navbar-nav .nav-link:hover {
+  color: var(--dark-accent) !important;
+}
+
+/* Input group mejorado */
+.dark-theme .input-group-text {
+  background: var(--dark-glass-bg) !important;
+  border: 1px solid var(--dark-glass-border) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+/* Lista de elementos */
+.dark-theme .list-group-item {
+  background: var(--dark-glass-bg) !important;
+  border: 1px solid var(--dark-border) !important;
+  color: var(--dark-text-primary) !important;
+}
+
+.dark-theme .list-group-item:hover {
+  background: rgba(58,160,255,0.1) !important;
+}
+
+/* Animaciones suaves */
+.dark-theme * {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease !important;
+}
+
+/* Estilos para Chatbot */
+.chatbot-container {
+  z-index: 1050;
+}
+
+.chatbot-message {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chatbot-fab {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Scrollbar personalizada para el chat */
+.chatbot-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatbot-messages::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb {
+  background: rgba(58,160,255,0.5);
+  border-radius: 3px;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(58,160,255,0.7);
+}

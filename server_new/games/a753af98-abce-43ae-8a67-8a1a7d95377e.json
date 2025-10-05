@@ -1,0 +1,55 @@
+{
+  "id": "a753af98-abce-43ae-8a67-8a1a7d95377e",
+  "scenario": "operator",
+  "turn": 1,
+  "maxTurns": 6,
+  "budget": 50000,
+  "satellites": [
+    {
+      "id": "SAT-1",
+      "massKg": 10,
+      "altKm": 550,
+      "ageYears": 1,
+      "eolPlanned": false,
+      "risk": 0.03,
+      "status": "active",
+      "collisionRisk": 0.03
+    },
+    {
+      "id": "SAT-2",
+      "massKg": 12,
+      "altKm": 560,
+      "ageYears": 2,
+      "eolPlanned": false,
+      "risk": 0.05,
+      "status": "active",
+      "collisionRisk": 0.05
+    },
+    {
+      "id": "SAT-3",
+      "massKg": 25,
+      "altKm": 540,
+      "ageYears": 3,
+      "eolPlanned": false,
+      "risk": 0.060000000000000005,
+      "status": "active",
+      "collisionRisk": 0.060000000000000005
+    },
+    {
+      "id": "SAT-4",
+      "massKg": 8,
+      "altKm": 560,
+      "ageYears": 1,
+      "eolPlanned": false,
+      "risk": 0.04,
+      "status": "active",
+      "collisionRisk": 0.04
+    }
+  ],
+  "aoi": null,
+  "history": [],
+  "score": 50,
+  "collisions": 0,
+  "totalDeltaV": 0,
+  "monitoringActive": false
+}

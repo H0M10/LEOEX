@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test SimpleGame</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Test Backend Connection</h1>
+    <button onclick="testGame()">Test Game Start</button>
+    <div id="result"></div>
+    
+    <script>
+        async function testGame() {
+            try {
+                const response = await axios.post('http://localhost:9002/api/game/start', {
+                    scenario: 'operator',
+                    budget: 100000,
+                    satellitesCount: 4
+                });
+                
+                document.getElementById('result').innerHTML = 
+                    `<h2>✅ Success!</h2>
+                     <p>Game ID: ${response.data.id}</p>
+                     <p>Budget: $${response.data.budget}</p>
+                     <p>Satellites: ${response.data.satellites.length}</p>
+                     <pre>${JSON.stringify(response.data, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById('result').innerHTML = 
+                    `<h2>❌ Error</h2>
+                     <p>${error.message}</p>
+                     <pre>${JSON.stringify(error.response?.data || error, null, 2)}</pre>`;
+            }
+        }
+    </script>
+</body>
+</html>
