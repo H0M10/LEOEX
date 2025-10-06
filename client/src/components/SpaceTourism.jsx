@@ -7,10 +7,11 @@ import UploadImage from './UploadImage';
 export default function SpaceTourism() {
   const [images, setImages] = useState([]);
   const [lastUrl, setLastUrl] = useState(null);
+  const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
 
   // Cargar imágenes desde el backend
   useEffect(() => {
-    fetch('http://localhost:9002/api/images')
+    fetch(`${base}/api/images`)
       .then(res => res.json())
       .then(setImages)
       .catch(() => setImages([]));
