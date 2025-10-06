@@ -9,7 +9,7 @@ const { getNasaSatellites } = require('./nasaProviders');
 
 const app = express();
 app.use(cors({
-  origin: 'https://h0m10.github.io'
+  origin: ['https://h0m10.github.io', 'https://H0M10.github.io']
 }));
 app.use(bodyParser.json());
 
