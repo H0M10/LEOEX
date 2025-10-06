@@ -6,9 +6,8 @@ import axios from 'axios';
 
 export default function ProfessionalHome({ onStart, onNavigate }) {
   const [loading, setLoading] = useState(false);
-  const base = import.meta.env.VITE_API_BASE || '${base}';
-
-  const base = import.meta.env.VITE_API_BASE || '${base}';
+  // API base URL
+  const base = import.meta.env.VITE_API_BASE || '';
 
   const startGame = async (profile = 'operator') => {
     setLoading(true);

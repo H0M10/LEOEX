@@ -1,15 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
 import UploadImage from './UploadImage';
+import SpaceTourism3D from './SpaceTourism3D';
 
 
 
 export default function SpaceTourism() {
   const [images, setImages] = useState([]);
   const [lastUrl, setLastUrl] = useState(null);
-  const base = import.meta.env.VITE_API_BASE || '${base}';
-
-  const base = import.meta.env.VITE_API_BASE || '${base}';
+  // API base URL (configure VITE_API_BASE in .env for production)
+  const base = import.meta.env.VITE_API_BASE || '';
 
   // Cargar imágenes desde el backend
   useEffect(() => {
@@ -75,14 +75,9 @@ export default function SpaceTourism() {
         </a>
       </div>
 
-      {/* Visualización simple de imágenes */}
-      <h4 className="mb-3">Imágenes Subidas</h4>
-      <div className="row">
-        {images.map(img => (
-          <div key={img.id} className="col-md-3 mb-3">
-            <img src={img.image_url} alt="Space Tourism" className="img-fluid rounded" />
-          </div>
-        ))}
+      {/* Visualización 3D: mundo girando y las imágenes orbitando */}
+      <div className="mb-4">
+        <SpaceTourism3D images={images} />
       </div>
     </div>
   );

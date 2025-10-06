@@ -7,9 +7,8 @@ export default function UploadImage({ onUploaded }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [url, setUrl] = useState(null);
-  const base = import.meta.env.VITE_API_BASE || '${base}';
-
-  const base = import.meta.env.VITE_API_BASE || '${base}';
+  // API base URL for metadata storage
+  const base = import.meta.env.VITE_API_BASE || '';
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
