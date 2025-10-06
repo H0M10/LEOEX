@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import TerrainMap from './TerrainMap';
 
 const SatelliteVisualization = ({ region, sector }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
