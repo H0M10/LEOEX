@@ -1,7 +1,7 @@
 const http = require('http');
 
 function healthCheck() {
-  const options = { hostname: 'localhost', port: 9002, path: '/health', method: 'GET' };
+  const options = { hostname: 'leoex-production.up.railway.app', port: 8080, path: '/health', method: 'GET' };
   const req = http.request(options, (res) => {
     console.log('Health status', res.statusCode);
     res.on('data', d => process.stdout.write(d));
@@ -13,7 +13,7 @@ function healthCheck() {
 
 function startGame() {
   const postData = JSON.stringify({ scenario: 'operator' });
-  const options = { hostname: 'localhost', port: 9002, path: '/api/game/start', method: 'POST', headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(postData) } };
+  const options = { hostname: 'leoex-production.up.railway.app', port: 8080, path: '/api/game/start', method: 'POST', headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(postData) } };
   const req = http.request(options, (res) => {
     console.log('\nStart status', res.statusCode);
     let body = '';
