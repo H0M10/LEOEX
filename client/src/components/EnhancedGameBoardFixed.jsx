@@ -304,7 +304,7 @@ function EnhancedGameBoard({ onExit, game, onSave }) {
     }
     // Send action to server and update state with response
     try {
-      const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
+      const base = import.meta.env.VITE_API_BASE || '${base}';
       const resp = await axios.post(`${base}/api/game/${state.id}/step`, {
         satActions: { [satelliteId]: action },
         taskAssignments: taskId ? { [taskId]: satelliteId } : undefined,
@@ -341,7 +341,7 @@ function EnhancedGameBoard({ onExit, game, onSave }) {
       return;
     }
     try {
-      const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
+      const base = import.meta.env.VITE_API_BASE || '${base}';
       const resp = await axios.post(`${base}/api/game/${state.id}/step`, { advance: true });
       if (resp.data) setState(resp.data);
     } catch (err) {
@@ -494,78 +494,6 @@ function EnhancedGameBoard({ onExit, game, onSave }) {
 
           <div className="row">
             <div className="col-md-6">
-              {/* 3D Visualization */}
-              <div className="card bg-dark text-white mb-3">
-                <div className="card-header">
-                  <h6><i className="fas fa-globe me-2"></i>Visualización Orbital LEO</h6>
-                </div>
-                <div className="card-body p-0">
-                  <div className="canvas-container" style={{ height: '400px', background: '#000' }}>
-                    <Visualization state={state} selected={selected} setSelected={setSelected} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Tasks Panel */}
-              <div className="task-panel-enhanced mb-3">
-                <div className="card-header">
-                  <h6><i className="fas fa-tasks me-2"></i>Tareas Activas ({activeTasks.length})</h6>
-                </div>
-                <div className="card-body" style={{ maxHeight: '350px', overflowY: 'auto' }}>
-                  {activeTasks.length === 0 ? (
-                    <p className="text-muted text-center p-4">No hay tareas activas. Las tareas se generan automáticamente cada turno.</p>
-                  ) : (
-                    activeTasks.map(task => {
-                      const turnsLeft = task.deadline - state.turn;
-                      const canComplete = !!selected; // allow client to request assignment; server will validate
-                      
-                      return (
-                        <div key={task.id} className="task-item-enhanced">
-                          <div className="d-flex justify-content-between align-items-start">
-                            <div style={{flex: 1}}>
-                              <div className="task-title-enhanced">
-                                <i className={`fas ${task.urgency === 'CRITICAL' ? 'fa-exclamation-triangle' : 'fa-tasks'} me-2`}></i>
-                                {task.title}
-                              </div>
-                              <p className="task-description-enhanced mb-2">{task.description}</p>
-                              <div className="d-flex align-items-center gap-2">
-                                <span className={`badge ${task.urgency === 'CRITICAL' ? 'bg-danger' : task.urgency === 'HIGH' ? 'bg-warning text-dark' : 'bg-info'}`}>
-                                  {task.urgency}
-                                </span>
-                                <span className="badge bg-secondary">{task.clientType}</span>
-                                {task.baseReward > 0 && (
-                                  <span className="text-success">${task.baseReward.toLocaleString()}</span>
-                                )}
-                                {task.penalty && (
-                                  <span className="text-danger">{task.penalty.toLocaleString()}</span>
-                                )}
-                              </div>
-                            </div>
-                            <div className="text-end">
-                              <div className="small mb-2">Vence: Turno {task.deadline}</div>
-                              <button 
-                                className={`task-action-button ${canComplete ? '' : 'disabled'}`} 
-                                disabled={!canComplete}
-                                onClick={() => {
-                                  if (canComplete) {
-                                    completeTask(task.id, selected);
-                                  }
-                                }}
-                              >
-                                <i className={`fas ${canComplete ? 'fa-rocket' : 'fa-lock'} me-1`}></i>
-                                {canComplete ? 'RESOLVER' : 'BLOQUEADO'}
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })
-                  )}
-                </div>
-              </div>
-            </div>
-            
-            <div className="col-md-6">
               {/* Satellite Management Panel */}
               <div className="satellite-list-enhanced mb-3">
                 <div className="card-header">
@@ -639,6 +567,64 @@ function EnhancedGameBoard({ onExit, game, onSave }) {
                 </div>
               </div>
 
+              {/* Tasks Panel */}
+              <div className="task-panel-enhanced mb-3">
+                <div className="card-header">
+                  <h6><i className="fas fa-tasks me-2"></i>Tareas Activas ({activeTasks.length})</h6>
+                </div>
+                <div className="card-body" style={{ maxHeight: '350px', overflowY: 'auto' }}>
+                  {activeTasks.length === 0 ? (
+                    <p className="text-muted text-center p-4">No hay tareas activas. Las tareas se generan automáticamente cada turno.</p>
+                  ) : (
+                    activeTasks.map(task => {
+                      const turnsLeft = task.deadline - state.turn;
+                      const canComplete = !!selected; // allow client to request assignment; server will validate
+                      
+                      return (
+                        <div key={task.id} className="task-item-enhanced">
+                          <div className="d-flex justify-content-between align-items-start">
+                            <div style={{flex: 1}}>
+                              <div className="task-title-enhanced">
+                                <i className={`fas ${task.urgency === 'CRITICAL' ? 'fa-exclamation-triangle' : 'fa-tasks'} me-2`}></i>
+                                {task.title}
+                              </div>
+                              <p className="task-description-enhanced mb-2">{task.description}</p>
+                              <div className="d-flex align-items-center gap-2">
+                                <span className={`badge ${task.urgency === 'CRITICAL' ? 'bg-danger' : task.urgency === 'HIGH' ? 'bg-warning text-dark' : 'bg-info'}`}>
+                                  {task.urgency}
+                                </span>
+                                <span className="badge bg-secondary">{task.clientType}</span>
+                                {task.baseReward > 0 && (
+                                  <span className="text-success">${task.baseReward.toLocaleString()}</span>
+                                )}
+                                {task.penalty && (
+                                  <span className="text-danger">{task.penalty.toLocaleString()}</span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="text-end">
+                              <div className="small mb-2">Vence: Turno {task.deadline}</div>
+                              <button 
+                                className={`task-action-button ${canComplete ? '' : 'disabled'}`} 
+                                disabled={!canComplete}
+                                onClick={() => {
+                                  if (canComplete) {
+                                    completeTask(task.id, selected);
+                                  }
+                                }}
+                              >
+                                <i className={`fas ${canComplete ? 'fa-rocket' : 'fa-lock'} me-1`}></i>
+                                {canComplete ? 'RESOLVER' : 'BLOQUEADO'}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+
               {/* Log Panel */}
               <div className="card bg-dark text-white mb-3">
                 <div className="card-header">
@@ -687,6 +673,20 @@ function EnhancedGameBoard({ onExit, game, onSave }) {
                       <i className="fas fa-forward me-2"></i>
                       Finalizar Turno
                     </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="col-md-6">
+              {/* 3D Visualization */}
+              <div className="card bg-dark text-white mb-3">
+                <div className="card-header">
+                  <h6><i className="fas fa-globe me-2"></i>Visualización Orbital LEO</h6>
+                </div>
+                <div className="card-body p-0">
+                  <div className="canvas-container" style={{ height: '400px', background: '#000' }}>
+                    <Visualization state={state} selected={selected} setSelected={setSelected} />
                   </div>
                 </div>
               </div>

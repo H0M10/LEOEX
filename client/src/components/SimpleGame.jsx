@@ -9,6 +9,8 @@ export default function SimpleGame({ onExit }) {
   const [log, setLog] = useState([]);
   const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
 
+  const base = import.meta.env.VITE_API_BASE || '${base}';
+
   // Iniciar juego automáticamente
   useEffect(() => {
     console.log('SimpleGame: Iniciando juego automáticamente...');

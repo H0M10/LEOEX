@@ -9,6 +9,8 @@ export default function SpaceTourism() {
   const [lastUrl, setLastUrl] = useState(null);
   const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
 
+  const base = import.meta.env.VITE_API_BASE || '${base}';
+
   // Cargar imágenes desde el backend
   useEffect(() => {
     fetch(`${base}/api/images`)

@@ -9,6 +9,8 @@ export default function UploadImage({ onUploaded }) {
   const [url, setUrl] = useState(null);
   const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
 
+  const base = import.meta.env.VITE_API_BASE || '${base}';
+
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setError(null);

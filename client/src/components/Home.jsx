@@ -6,7 +6,7 @@ export default function Home({ onStart }){
   const [showTutorial, setShowTutorial] = useState(false);
 
   const start = async (scenario) => {
-    const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
+    const base = import.meta.env.VITE_API_BASE || '${base}';
     const resp = await axios.post(`${base}/api/game/start`, { 
       scenario, 
       budget: 100000, 
