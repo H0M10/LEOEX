@@ -1,24 +1,19 @@
 import LEOExchangeDashboard from './components/LEOExchangeDashboard';
 import React, { useState } from 'react';
 import './styles/dark-theme.css';
-import ProfessionalHome from './components/ProfessionalHome';
 import ProfessionalHomeSimple from './components/ProfessionalHomeSimple';
 import Home from './components/Home';
 import SimpleGame from './components/SimpleGame';
-import SimpleGameFast from './components/SimpleGameFast';
 import InstantGame from './components/InstantGame';
 import MissionGame from './components/MissionGame';
-import MissionGame3D from './components/MissionGame3D';
 import SectorGuide from './components/SectorGuide';
 import Marketplace from './components/Marketplace';
 import SatelliteTracker3D from './components/SatelliteTracker3D';
 import Dashboard from './components/Dashboard';
 import SatelliteAnalytics from './components/SatelliteAnalytics';
-import SatelliteAnalyticsReal from './components/SatelliteAnalyticsReal';
 
 import ProfessionalSatelliteAnalytics from './components/ProfessionalSatelliteAnalytics';
 import SpaceTourism from './components/SpaceTourism';
-import SpaceTourismGallery from './components/SpaceTourismGallery';
 import GeminiChatbot from './components/GeminiChatbot';
 
 export default function App(){
@@ -76,7 +71,7 @@ export default function App(){
 
   // Simple Game
   if (showSimpleGame) {
-    return <MissionGame3D onExit={() => setShowSimpleGame(false)} />;
+    return <MissionGame onExit={() => setShowSimpleGame(false)} />;
   }
 
   // View rendering logic
@@ -123,7 +118,7 @@ export default function App(){
   }
 
   if (currentView === 'spaceTourismGallery') {
-    return <SpaceTourismGallery />;
+    return <SpaceTourism />;
   }
   if (currentView === 'leo-exchange') {
     return <LEOExchangeDashboard onBack={handleBack} />;
@@ -131,7 +126,7 @@ export default function App(){
 
   if (game) {
     return (
-      <MissionGame3D onExit={() => {
+      <MissionGame onExit={() => {
         setGame(null);
         setCurrentView('professional-home');
       }} />

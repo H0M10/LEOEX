@@ -8,7 +8,9 @@ const { createInitialState, stepTurn, evaluateGameStatus, getStrategicTips } = r
 const { getNasaSatellites } = require('./nasaProviders');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://h0m10.github.io'
+}));
 app.use(bodyParser.json());
 
 // --- API de proveedores reales (NASA y aliados) ---

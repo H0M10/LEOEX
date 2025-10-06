@@ -13,7 +13,7 @@ import {
   Legend,
 } from 'chart.js';
 import SectorSpecificDataService from '../services/SectorSpecificDataService';
-import SatelliteVisualizationReal from './SatelliteVisualizationReal';
+import SatelliteVisualization from './SatelliteVisualization';
 import '../styles/dark-theme.css';
 
 ChartJS.register(
@@ -1173,7 +1173,7 @@ const ProfessionalSatelliteAnalytics = ({ onBack }) => {
         {currentRegion && (
           <div className="row mt-4">
             <div className="col-12">
-              <SatelliteVisualizationReal 
+              <SatelliteVisualization 
                 region={currentRegion} 
                 sector={selectedSector} 
               />

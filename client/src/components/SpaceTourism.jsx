@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import SpaceTourism3D from './SpaceTourism3D';
 import UploadImage from './UploadImage';
 
 
@@ -73,9 +72,15 @@ export default function SpaceTourism() {
         </a>
       </div>
 
-      {/* Visualización 3D estilo Tracker (React Three Fiber) */}
-      <h4 className="mb-3">Visualización 3D (R3F)</h4>
-      <SpaceTourism3D images={images} />
+      {/* Visualización simple de imágenes */}
+      <h4 className="mb-3">Imágenes Subidas</h4>
+      <div className="row">
+        {images.map(img => (
+          <div key={img.id} className="col-md-3 mb-3">
+            <img src={img.image_url} alt="Space Tourism" className="img-fluid rounded" />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
