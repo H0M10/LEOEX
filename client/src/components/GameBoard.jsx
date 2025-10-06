@@ -14,7 +14,7 @@ export default function GameBoard({ game, onExit }){
   useEffect(()=> setState(game), [game]);
 
   const step = async (actions) => {
-  const base = import.meta.env.VITE_API_BASE || 'http://localhost:9000';
+  const base = import.meta.env.VITE_API_BASE || 'https://leoex-production.up.railway.app';
   const resp = await axios.post(`${base}/api/game/${state.id}/step`, { actions });
     setState(resp.data);
     // Extraer eventos del último turno
@@ -23,7 +23,7 @@ export default function GameBoard({ game, onExit }){
   };
 
   const downloadReport = async () => {
-    const base = import.meta.env.VITE_API_BASE || 'http://localhost:9000';
+    const base = import.meta.env.VITE_API_BASE || 'https://leoex-production.up.railway.app';
     const url = `${base.replace(/:9000$|:9002$|:4000$/, ':4000')}/api/game/${state.id}/report`;
     const a = document.createElement('a');
     a.href = url;
