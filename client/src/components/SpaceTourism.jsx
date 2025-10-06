@@ -7,7 +7,7 @@ import UploadImage from './UploadImage';
 export default function SpaceTourism() {
   const [images, setImages] = useState([]);
   const [lastUrl, setLastUrl] = useState(null);
-  const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
+  const base = import.meta.env.VITE_API_BASE || '${base}';
 
   const base = import.meta.env.VITE_API_BASE || '${base}';
 

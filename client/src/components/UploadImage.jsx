@@ -7,7 +7,7 @@ export default function UploadImage({ onUploaded }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [url, setUrl] = useState(null);
-  const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
+  const base = import.meta.env.VITE_API_BASE || '${base}';
 
   const base = import.meta.env.VITE_API_BASE || '${base}';
 

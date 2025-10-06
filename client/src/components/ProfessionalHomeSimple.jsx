@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export default function ProfessionalHome({ onStart, onNavigate }) {
   const [loading, setLoading] = useState(false);
-  const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
+  const base = import.meta.env.VITE_API_BASE || '${base}';
 
   const base = import.meta.env.VITE_API_BASE || '${base}';
 

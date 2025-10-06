@@ -7,7 +7,7 @@ export default function SimpleGame({ onExit }) {
   const [loading, setLoading] = useState(false);
   const [selectedSat, setSelectedSat] = useState(null);
   const [log, setLog] = useState([]);
-  const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
+  const base = import.meta.env.VITE_API_BASE || '${base}';
 
   const base = import.meta.env.VITE_API_BASE || '${base}';
 
