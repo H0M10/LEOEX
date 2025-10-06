@@ -304,7 +304,7 @@ function EnhancedGameBoard({ onExit, game, onSave }) {
     }
     // Send action to server and update state with response
     try {
-      const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
+      const base = import.meta.env.VITE_API_BASE || '${base}';
       const resp = await axios.post(`${base}/api/game/${state.id}/step`, {
         satActions: { [satelliteId]: action },
         taskAssignments: taskId ? { [taskId]: satelliteId } : undefined,
@@ -341,7 +341,7 @@ function EnhancedGameBoard({ onExit, game, onSave }) {
       return;
     }
     try {
-      const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
+      const base = import.meta.env.VITE_API_BASE || '${base}';
       const resp = await axios.post(`${base}/api/game/${state.id}/step`, { advance: true });
       if (resp.data) setState(resp.data);
     } catch (err) {

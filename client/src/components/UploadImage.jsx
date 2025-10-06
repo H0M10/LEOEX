@@ -8,6 +8,8 @@ export default function UploadImage({ onUploaded }) {
   const [error, setError] = useState(null);
   const [url, setUrl] = useState(null);
 
+  const base = import.meta.env.VITE_API_BASE || '${base}';
+
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setError(null);
@@ -24,7 +26,7 @@ export default function UploadImage({ onUploaded }) {
       const result = await uploadToCloudinary(blob);
       setUrl(result.secure_url);
       // Guardar metadata en backend
-      await fetch('http://localhost:9002/api/images', {
+      await fetch(`${base}/api/images`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

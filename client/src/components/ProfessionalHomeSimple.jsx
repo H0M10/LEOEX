@@ -7,10 +7,12 @@ import axios from 'axios';
 export default function ProfessionalHome({ onStart, onNavigate }) {
   const [loading, setLoading] = useState(false);
 
+  const base = import.meta.env.VITE_API_BASE || '${base}';
+
   const startGame = async (profile = 'operator') => {
     setLoading(true);
     try {
-      const resp = await axios.post('http://localhost:9002/api/game/start', { 
+      const resp = await axios.post(`${base}/api/game/start`, { 
         scenario: profile, 
         budget: 100000, 
         satellitesCount: 4 

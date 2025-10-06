@@ -28,7 +28,7 @@ export default function LEOExchangeDashboard() {
   const [showAdd, setShowAdd] = useState(false);
 
   // Usar variable base configurable por entorno
-  const base = import.meta.env.VITE_API_BASE || 'http://localhost:9002';
+  const base = import.meta.env.VITE_API_BASE || '${base}';
 
   useEffect(() => {
     setLoading(true);

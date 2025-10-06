@@ -8,6 +8,8 @@ export default function SimpleGame({ onExit }) {
   const [selectedSat, setSelectedSat] = useState(null);
   const [log, setLog] = useState([]);
 
+  const base = import.meta.env.VITE_API_BASE || '${base}';
+
   // Iniciar juego automáticamente
   useEffect(() => {
     console.log('SimpleGame: Iniciando juego automáticamente...');
@@ -23,7 +25,7 @@ export default function SimpleGame({ onExit }) {
     setLoading(true);
     try {
       console.log('SimpleGame: Haciendo petición al backend...');
-      const response = await axios.post('http://localhost:9002/api/game/start', {
+      const response = await axios.post(`${base}/api/game/start`, {
         scenario: 'operator',
         budget: 100000,
         satellitesCount: 4
@@ -49,7 +51,7 @@ export default function SimpleGame({ onExit }) {
     setLoading(true);
     try {
       const actions = { [satId]: action };
-      const response = await axios.post(`http://localhost:9002/api/game/${gameState.id}/step`, {
+      const response = await axios.post(`${base}/api/game/${gameState.id}/step`, {
         actions: { actions }
       });
       
@@ -68,7 +70,7 @@ export default function SimpleGame({ onExit }) {
     setLoading(true);
     try {
       const assignments = { [taskId]: satId };
-      const response = await axios.post(`http://localhost:9002/api/game/${gameState.id}/step`, {
+      const response = await axios.post(`${base}/api/game/${gameState.id}/step`, {
         actions: { assignments }
       });
       
@@ -86,7 +88,7 @@ export default function SimpleGame({ onExit }) {
     
     setLoading(true);
     try {
-      const response = await axios.post(`http://localhost:9002/api/game/${gameState.id}/step`, {
+      const response = await axios.post(`${base}/api/game/${gameState.id}/step`, {
         actions: { advance: true }
       });
       
