@@ -1,0 +1,54 @@
+name: Deploy docs on push to main
+
+on:
+  push:
+    branches: [ main ]
+    # Only rebuild when frontend changes, to avoid loops when we push docs
+    paths:
+      - 'client/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install dependencies
+        working-directory: client
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: client
+        run: npm run build
+
+      - name: Sync dist to docs
+        run: |
+          rm -rf docs
+          mkdir -p docs
+          cp -r client/dist/* docs/
+
+      - name: Commit and push docs if changed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git status --porcelain | grep -E '^(\?\?| M|A  |D  ) docs/' > /dev/null; then
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor }}@users.noreply.github.com"
+            git add docs
+            git commit -m "Update docs build [skip ci]"
+            git push origin main
+          else
+            echo "No changes detected in docs; skipping push."
