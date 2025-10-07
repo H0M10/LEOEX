@@ -19,33 +19,63 @@ import GeminiChatbot from './components/GeminiChatbot';
 export default function App(){
   const [game, setGame] = useState(null);
   const [currentView, setCurrentView] = useState('professional-home');
+  const [showSimpleGame, setShowSimpleGame] = useState(false);
+
+  // Parse view from hash or query
+  const parseViewFromLocation = () => {
+    try {
+      // Prefer hash-based routes (e.g. #/game)
+      const hash = window.location.hash || '';
+      if (hash.startsWith('#/')) {
+        const route = hash.slice(2); // remove '#/'
+        if (route === 'game' || route === 'mission-game') {
+          setShowSimpleGame(true);
+          return 'mission-game';
+        }
+        // known views pass-through
+        return route || 'professional-home';
+      }
+      // Fallback to query param
+      const params = new URLSearchParams(window.location.search);
+      const view = params.get('view') || 'professional-home';
+      return view;
+    } catch {
+      return 'professional-home';
+    }
+  };
 
   // Initialize from URL param if present and handle browser navigation
   React.useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const view = params.get('view') || 'professional-home';
-      if (view !== currentView) {
-        setCurrentView(view);
-      }
-    } catch {}
+    const view = parseViewFromLocation();
+    if (view !== currentView) {
+      setCurrentView(view);
+    }
   }, []);
 
   // Handle browser back/forward buttons
   React.useEffect(() => {
-    const handlePopState = (e) => {
-      const params = new URLSearchParams(window.location.search);
-      const view = params.get('view') || 'professional-home';
+    const handlePopState = () => {
+      const view = parseViewFromLocation();
+      if (view === 'mission-game') {
+        setShowSimpleGame(true);
+      } else {
+        setShowSimpleGame(false);
+      }
       setCurrentView(view);
     };
 
+    const handleHashChange = () => {
+      handlePopState();
+    };
+
     window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handleHashChange);
 
     return () => {
       window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handleHashChange);
     };
   }, []);
-  const [showSimpleGame, setShowSimpleGame] = useState(false);
 
   // Navigation handler - manages internal navigation 
   const handleNavigation = (view, e) => {
@@ -53,9 +83,16 @@ export default function App(){
       e.preventDefault();
       e.stopPropagation();
     }
+    // Update hash for easier deep-linking on GitHub Pages
+    window.location.hash = `/${view}`;
     setCurrentView(view);
     // Update URL and add to browser history for proper back navigation
     window.history.pushState({view}, '', window.location.pathname + `?view=${view}`);
+    if (view === 'mission-game' || view === 'game') {
+      setShowSimpleGame(true);
+    } else {
+      setShowSimpleGame(false);
+    }
   };
 
   // Back to home handler
@@ -65,6 +102,8 @@ export default function App(){
       e.stopPropagation();
     }
     setCurrentView('professional-home');
+    setShowSimpleGame(false);
+    window.location.hash = `/professional-home`;
     // Update URL and add to browser history
     window.history.pushState({view: 'professional-home'}, '', window.location.pathname + '?view=professional-home');
   };
