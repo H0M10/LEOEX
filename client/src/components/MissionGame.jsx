@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import SatelliteTracker3D from './SatelliteTracker3D';
 
 export default function MissionGame({ onExit }) {
   const [gameState, setGameState] = useState({
@@ -295,308 +296,126 @@ export default function MissionGame({ onExit }) {
   const missionProgress = Math.min(100, (totalData / MISSION_TARGET) * 100);
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0c0c0c 0%, #1a1a3e 50%, #2d1b69 100%)',
-      padding: '15px',
-      fontFamily: 'Arial, sans-serif',
-      color: 'white'
-    }}>
-      
-      {/* Header con misión */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'flex-start',
-        marginBottom: '15px',
-        padding: '20px',
-        background: gameStatus === 'won' ? 'linear-gradient(90deg, #28a745, #20c997)' : 
-                   gameStatus === 'lost' ? 'linear-gradient(90deg, #dc3545, #e83e8c)' :
-                   'linear-gradient(90deg, #1e3c72 0%, #2a5298 100%)',
-        borderRadius: '15px',
-        boxShadow: '0 8px 25px rgba(0,0,0,0.4)',
-        position: 'relative',
-        zIndex: 1000,
-        isolation: 'isolate'
-      }}>
-        <div style={{ flex: 1 }}>
-          <h1 style={{ margin: '0 0 8px 0', fontSize: '24px', lineHeight: '1.2' }}>
-            {gameStatus === 'won' ? '🏆 MISIÓN COMPLETADA' : 
-             gameStatus === 'lost' ? '💥 MISIÓN FALLIDA' : 
-             '🎯 MISIÓN LEO CIENTÍFICA'}
-          </h1>
-          <small style={{ opacity: 0.9, fontSize: '13px', display: 'block', lineHeight: '1.4' }}>
+    <div className="missiongame-3d-layout d-flex vh-100" style={{background: '#0c0c0c', color: 'white', fontFamily: 'Arial, sans-serif'}}>
+      {/* Panel Izquierdo: Menú, misión, satélites, acciones */}
+      <div className="bg-dark p-4 overflow-auto" style={{width: 420, minWidth: 320, maxWidth: 500, boxShadow: '2px 0 8px #0008', zIndex: 2}}>
+        {/* Header con misión */}
+        <div style={{marginBottom: '15px'}}>
+          <h1 style={{fontSize: '24px'}}>{gameStatus === 'won' ? '🏆 MISIÓN COMPLETADA' : gameStatus === 'lost' ? '💥 MISIÓN FALLIDA' : '🎯 MISIÓN LEO CIENTÍFICA'}</h1>
+          <small style={{opacity: 0.9, fontSize: '13px', display: 'block', lineHeight: '1.4'}}>
             Objetivo: {totalData}/{MISSION_TARGET} datos • Turno: {gameState.turn}/{MAX_TURNS} • Acciones: {gameState.actionsLeft || 2}/{gameState.maxActions || 2}
           </small>
+          <button className="btn btn-outline-danger btn-sm float-end" onClick={onExit}>Salir</button>
         </div>
-        <button 
-          onClick={onExit}
-          style={{
-            padding: '12px 24px',
-            background: 'linear-gradient(45deg, #2196F3, #1976D2)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '30px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontSize: '14px',
-            boxShadow: '0 6px 15px rgba(33, 150, 243, 0.4)',
-            position: 'relative',
-            zIndex: 1001,
-            marginLeft: '20px',
-            flexShrink: 0,
-            whiteSpace: 'nowrap',
-            transition: 'all 0.3s ease',
-            transform: 'translateZ(0)'
-          }}
-          onMouseOver={(e) => {
-            e.target.style.transform = 'translateY(-2px) translateZ(0)';
-            e.target.style.boxShadow = '0 8px 20px rgba(33, 150, 243, 0.6)';
-          }}
-          onMouseOut={(e) => {
-            e.target.style.transform = 'translateY(0) translateZ(0)';
-            e.target.style.boxShadow = '0 6px 15px rgba(33, 150, 243, 0.4)';
-          }}
-        >
-          ← Back to Mission Control
-        </button>
-      </div>
-
-      {/* Ayuda inicial */}
-      {showHelp && (
-        <div style={{ 
-          padding: '15px',
-          background: 'rgba(13, 202, 240, 0.15)',
-          border: '2px solid #0dcaf0',
-          borderRadius: '10px',
-          marginBottom: '15px'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <h4 style={{ margin: 0, color: '#0dcaf0' }}>📖 GUÍA DE MISIÓN</h4>
-              <p style={{ margin: '5px 0', fontSize: '14px' }}>
-                <strong>OBJETIVO:</strong> Recolecta {MISSION_TARGET} datos científicos en solo {MAX_TURNS} turnos - MODO EXTREMO<br/>
-                <strong>PELIGROS:</strong> Fallos de escaneo (25%), tormentas solares, micrometeoritos, reparaciones arriesgadas<br/>
-                <strong>ESTRATEGIA:</strong> Administra riesgos, toma decisiones difíciles, cada acción puede fallar
-              </p>
+        {/* Ayuda inicial */}
+        {showHelp && (
+          <div className="mb-3 p-3 border border-info rounded" style={{background: 'rgba(13,202,240,0.15)'}}>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <h4 className="mb-1 text-info">📖 GUÍA DE MISIÓN</h4>
+                <p style={{fontSize: '14px'}}>
+                  <strong>OBJETIVO:</strong> Recolecta {MISSION_TARGET} datos científicos en solo {MAX_TURNS} turnos - MODO EXTREMO<br/>
+                  <strong>PELIGROS:</strong> Fallos de escaneo (25%), tormentas solares, micrometeoritos, reparaciones arriesgadas<br/>
+                  <strong>ESTRATEGIA:</strong> Administra riesgos, toma decisiones difíciles, cada acción puede fallar
+                </p>
+              </div>
+              <button className="btn btn-sm btn-outline-info" onClick={() => setShowHelp(false)}>×</button>
             </div>
-            <button onClick={() => setShowHelp(false)} style={{ 
-              background: 'transparent', 
-              border: 'none', 
-              color: '#0dcaf0', 
-              fontSize: '20px',
-              cursor: 'pointer'
-            }}>×</button>
+          </div>
+        )}
+        {/* Progreso de misión */}
+        <div className="mb-3">
+          <div className="d-flex justify-content-between align-items-center mb-1">
+            <span className="fw-bold">🎯 Progreso de Misión</span>
+            <span>{missionProgress.toFixed(1)}%</span>
+          </div>
+          <div className="progress" style={{height: '10px'}}>
+            <div className={`progress-bar ${missionProgress >= 100 ? 'bg-success' : missionProgress >= 70 ? 'bg-warning' : 'bg-primary'}`} role="progressbar" style={{width: `${missionProgress}%`}}></div>
           </div>
         </div>
-      )}
-
-      {/* Progreso de misión */}
-      <div style={{ 
-        padding: '15px',
-        background: 'rgba(255,255,255,0.1)',
-        borderRadius: '10px',
-        marginBottom: '15px'
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-          <span style={{ fontWeight: 'bold' }}>🎯 Progreso de Misión</span>
-          <span>{missionProgress.toFixed(1)}%</span>
+        {/* Status */}
+        <div className="mb-3 p-2 border rounded" style={{background: 'rgba(255,255,255,0.1)'}}>
+          <div className="fw-bold">📡 {message}</div>
+          {processing && <div className="mt-1" style={{opacity: 0.7}}>⏳ Procesando...</div>}
         </div>
-        <div style={{ 
-          width: '100%', 
-          height: '10px', 
-          background: 'rgba(255,255,255,0.2)', 
-          borderRadius: '5px',
-          overflow: 'hidden'
-        }}>
-          <div style={{ 
-            width: `${missionProgress}%`, 
-            height: '100%', 
-            background: missionProgress >= 100 ? '#28a745' : 
-                       missionProgress >= 70 ? '#ffc107' : '#007bff',
-            transition: 'width 0.3s'
-          }}></div>
+        {/* Stats compactas */}
+        <div className="row mb-3">
+          <div className="col-6 mb-2">
+            <div className="p-2 rounded text-center" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+              <div style={{fontSize: '12px', opacity: 0.8}}>💰 PRESUPUESTO</div>
+              <div style={{fontSize: '18px', fontWeight: 'bold'}}>${gameState.budget.toLocaleString()}</div>
+            </div>
+          </div>
+          <div className="col-6 mb-2">
+            <div className="p-2 rounded text-center" style={{background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'}}>
+              <div style={{fontSize: '12px', opacity: 0.8}}>🔬 DATOS TOTALES</div>
+              <div style={{fontSize: '18px', fontWeight: 'bold'}}>{totalData}</div>
+            </div>
+          </div>
+          <div className="col-6 mb-2">
+            <div className="p-2 rounded text-center" style={{background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'}}>
+              <div style={{fontSize: '12px', opacity: 0.8}}>⚡ ACCIONES RESTANTES</div>
+              <div style={{fontSize: '18px', fontWeight: 'bold'}}>{gameState.actionsLeft}/{gameState.maxActions}</div>
+            </div>
+          </div>
+          <div className="col-6 mb-2">
+            <div className="p-2 rounded text-center" style={{background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', color: '#333'}}>
+              <div style={{fontSize: '12px', opacity: 0.8}}>⏰ TURNOS RESTANTES</div>
+              <div style={{fontSize: '18px', fontWeight: 'bold'}}>{MAX_TURNS - gameState.turn}</div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Status */}
-      <div style={{ 
-        padding: '12px 20px',
-        background: 'rgba(255,255,255,0.1)',
-        borderRadius: '8px',
-        marginBottom: '15px',
-        border: '1px solid rgba(255,255,255,0.2)'
-      }}>
-        <div style={{ fontSize: '16px', fontWeight: 'bold' }}>📡 {message}</div>
-        {processing && <div style={{ marginTop: '5px', opacity: 0.7 }}>⏳ Procesando...</div>}
-      </div>
-
-      {/* Stats compactas */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-        gap: '10px',
-        marginBottom: '20px'
-      }}>
-        <div style={{ 
-          padding: '12px', 
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          borderRadius: '8px',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: '12px', opacity: 0.8 }}>💰 PRESUPUESTO</div>
-          <div style={{ fontSize: '18px', fontWeight: 'bold' }}>${gameState.budget.toLocaleString()}</div>
-        </div>
-        
-        <div style={{ 
-          padding: '12px', 
-          background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-          borderRadius: '8px',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: '12px', opacity: 0.8 }}>🔬 DATOS TOTALES</div>
-          <div style={{ fontSize: '18px', fontWeight: 'bold' }}>{totalData}</div>
-        </div>
-        
-        <div style={{ 
-          padding: '12px', 
-          background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-          borderRadius: '8px',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: '12px', opacity: 0.8 }}>⚡ ACCIONES RESTANTES</div>
-          <div style={{ fontSize: '18px', fontWeight: 'bold' }}>{gameState.actionsLeft}/{gameState.maxActions}</div>
-        </div>
-        
-        <div style={{ 
-          padding: '12px', 
-          background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
-          borderRadius: '8px',
-          textAlign: 'center',
-          color: '#333'
-        }}>
-          <div style={{ fontSize: '12px', opacity: 0.8 }}>⏰ TURNOS RESTANTES</div>
-          <div style={{ fontSize: '18px', fontWeight: 'bold' }}>{MAX_TURNS - gameState.turn}</div>
-        </div>
-      </div>
-
-      {/* Satélites */}
-      <div style={{ marginBottom: '20px' }}>
-        <h3 style={{ marginBottom: '15px' }}>🛰️ Flota Científica (2 Satélites)</h3>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-          gap: '15px'
-        }}>
+        {/* Satélites y acciones */}
+        <div className="mb-3">
+          <h3 className="mb-2">🛰️ Flota Científica (2 Satélites)</h3>
           {gameState.satellites.map((sat) => (
-            <div key={sat.id} style={{ 
-              padding: '15px',
-              background: sat.health < 30 ? 'linear-gradient(135deg, #c31432, #240b36)' :
-                         sat.fuel < 20 ? 'linear-gradient(135deg, #f7971e, #ffd200)' :
-                         'linear-gradient(135deg, #56ab2f, #a8e6cf)',
-              borderRadius: '12px',
-              color: sat.health < 30 || sat.fuel < 20 ? 'white' : '#333',
-              boxShadow: '0 8px 25px rgba(0,0,0,0.2)'
-            }}>
-              <div style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center',
-                marginBottom: '12px'
-              }}>
-                <div style={{ fontWeight: 'bold', fontSize: '18px' }}>{sat.id}</div>
-                <div style={{ fontSize: '12px' }}>
-                  <span style={{ marginRight: '8px' }}>⛽ {sat.fuel}%</span>
-                  <span style={{ marginRight: '8px' }}>❤️ {sat.health}%</span>
-                  <span style={{ marginRight: '8px' }}>⚙️ {sat.efficiency}%</span>
+            <div key={sat.id} className="mb-3 p-3 rounded" style={{background: sat.health < 30 ? 'linear-gradient(135deg, #c31432, #240b36)' : sat.fuel < 20 ? 'linear-gradient(135deg, #f7971e, #ffd200)' : 'linear-gradient(135deg, #56ab2f, #a8e6cf)', color: sat.health < 30 || sat.fuel < 20 ? 'white' : '#333'}}>
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <div className="fw-bold" style={{fontSize: '18px'}}>{sat.id}</div>
+                <div style={{fontSize: '12px'}}>
+                  <span className="me-2">⛽ {sat.fuel}%</span>
+                  <span className="me-2">❤️ {sat.health}%</span>
+                  <span className="me-2">⚙️ {sat.efficiency}%</span>
                   <span>🔬 {sat.missionData}</span>
                 </div>
               </div>
-              
-              <div style={{ fontSize: '13px', marginBottom: '15px', opacity: 0.9 }}>
+              <div style={{fontSize: '13px', marginBottom: '10px', opacity: 0.9}}>
                 📡 {sat.status} • {sat.lastAction}
               </div>
-              
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '1fr 1fr', 
-                gap: '8px'
-              }}>
+              <div className="row">
                 {Object.entries(actionExplanations).map(([action, explanation]) => (
-                  <div key={action}>
-                    <button 
+                  <div key={action} className="col-6 mb-2">
+                    <button className="btn btn-sm w-100"
                       onClick={() => performAction(sat.id, action)}
                       disabled={processing || gameStatus !== 'playing' || gameState.actionsLeft <= 0}
-                      style={{
-                        width: '100%',
-                        padding: '10px 8px',
-                        background: gameState.actionsLeft <= 0 ? 'rgba(100,100,100,0.3)' :
-                                   processing ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.9)',
-                        color: gameState.actionsLeft <= 0 ? '#666' : '#333',
-                        border: gameState.actionsLeft <= 0 ? '1px solid #666' : 'none',
-                        borderRadius: '6px',
-                        cursor: processing || gameStatus !== 'playing' || gameState.actionsLeft <= 0 ? 'not-allowed' : 'pointer',
-                        fontSize: '12px',
-                        fontWeight: 'bold',
-                        opacity: processing || gameStatus !== 'playing' || gameState.actionsLeft <= 0 ? 0.5 : 1
-                      }}
                       title={gameState.actionsLeft <= 0 ? 'Sin acciones restantes - Avanza turno' : explanation}
+                      style={{fontWeight: 'bold', opacity: processing || gameStatus !== 'playing' || gameState.actionsLeft <= 0 ? 0.5 : 1}}
                     >
                       {action === 'SCAN' && '🔬 ESCANEAR'}
                       {action === 'REFUEL' && '⛽ RECARGAR'}
                       {action === 'REPAIR' && '🔧 REPARAR'}
                       {action === 'BOOST' && '🚀 IMPULSO'}
                     </button>
-                    <div style={{ fontSize: '10px', marginTop: '2px', opacity: 0.8, textAlign: 'center' }}>
-                      {explanation.split('.')[0]}
-                    </div>
+                    <div style={{fontSize: '10px', marginTop: '2px', opacity: 0.8, textAlign: 'center'}}>{explanation.split('.')[0]}</div>
                   </div>
                 ))}
               </div>
             </div>
           ))}
         </div>
+        {/* Pantalla de victoria/derrota */}
+        {gameStatus !== 'playing' && (
+          <div className="p-4 rounded text-center" style={{background: gameStatus === 'won' ? 'linear-gradient(135deg, #28a745, #20c997)' : 'linear-gradient(135deg, #dc3545, #c82333)', color: 'white'}}>
+            <h2 className="mb-3" style={{fontSize: '28px'}}>{gameStatus === 'won' ? '🏆 ¡VICTORIA!' : '💥 DERROTA'}</h2>
+            <p style={{fontSize: '16px', margin: '10px 0', opacity: 0.9}}>{gameStatus === 'won' ? `¡Excelente trabajo! Completaste la misión recolectando ${totalData} datos científicos.` : 'La misión ha fallado. Los datos científicos no fueron suficientes para completar la investigación.'}</p>
+            <button className="btn btn-light btn-lg mt-3" onClick={() => window.location.reload()}>🔄 Nueva Misión</button>
+          </div>
+        )}
       </div>
-
-
-
-      {/* Pantalla de victoria/derrota */}
-      {gameStatus !== 'playing' && (
-        <div style={{ 
-          padding: '30px',
-          background: gameStatus === 'won' ? 
-            'linear-gradient(135deg, #28a745, #20c997)' : 
-            'linear-gradient(135deg, #dc3545, #c82333)',
-          borderRadius: '15px',
-          textAlign: 'center',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
-        }}>
-          <h2 style={{ margin: '0 0 15px 0', fontSize: '28px' }}>
-            {gameStatus === 'won' ? '🏆 ¡VICTORIA!' : '💥 DERROTA'}
-          </h2>
-          <p style={{ fontSize: '16px', margin: '10px 0', opacity: 0.9 }}>
-            {gameStatus === 'won' ? 
-              `¡Excelente trabajo! Completaste la misión recolectando ${totalData} datos científicos.` :
-              'La misión ha fallado. Los datos científicos no fueron suficientes para completar la investigación.'
-            }
-          </p>
-          <button 
-            onClick={() => window.location.reload()}
-            style={{
-              padding: '12px 25px',
-              background: 'rgba(255,255,255,0.2)',
-              color: 'white',
-              border: '2px solid white',
-              borderRadius: '25px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              marginTop: '15px'
-            }}
-          >
-            🔄 Nueva Misión
-          </button>
-        </div>
-      )}
+      {/* Panel Derecho: Mundo 3D interactivo */}
+      <div className="flex-grow-1 position-relative" style={{minWidth: 0, background: '#000'}}>
+        <SatelliteTracker3D />
+      </div>
     </div>
   );
 }
