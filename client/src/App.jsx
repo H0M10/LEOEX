@@ -108,9 +108,13 @@ export default function App(){
     window.history.pushState({view: 'professional-home'}, '', window.location.pathname + '?view=professional-home');
   };
 
-  // Simple Game
-  if (showSimpleGame) {
-    return <MissionGame onExit={() => setShowSimpleGame(false)} />;
+  // Mostrar MissionGame si el hash es #/game o #/mission-game
+  if (window.location.hash === '#/game' || window.location.hash === '#/mission-game' || showSimpleGame) {
+    return <MissionGame onExit={() => {
+      setShowSimpleGame(false);
+      setCurrentView('professional-home');
+      window.location.hash = '/professional-home';
+    }} />;
   }
 
   // View rendering logic
