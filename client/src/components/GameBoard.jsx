@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import MapView from './MapView';
 import TurnPanel from './TurnPanel';
 import Scoreboard from './Scoreboard';
-import NDVIChart from './NDVIChart';
 import EventLog from './EventLog';
 import GameSummary from './GameSummary';
+import SatelliteTracker3D from './SatelliteTracker3D';
 
 export default function GameBoard({ game, onExit }){
   const [state, setState] = useState(game);
@@ -45,37 +44,30 @@ export default function GameBoard({ game, onExit }){
   };
 
   return (
-    <div className="container-fluid">
-      <div className="row mb-3">
-        <div className="col-12">
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h2>LEO Decisions - {state.scenario === 'operator' ? 'Operador Satelital' : state.scenario === 'inmobiliaria' ? 'Inmobiliaria' : 'ONG Ambiental'}</h2>
-              <p className="text-muted">{getScenarioDescription()}</p>
-            </div>
-            <div>
-              <span className="badge bg-primary me-2">Turno {state.turn}/{state.maxTurns}</span>
-              <button className="btn btn-outline-danger btn-sm" onClick={onExit}>Salir</button>
-            </div>
-          </div>
+    <div className="gameboard-3d-layout d-flex vh-100" style={{background: '#0f1419'}}>
+      {/* Sidebar Izquierda: Menú y Acciones */}
+      <div className="bg-dark text-white p-4" style={{width: 370, minWidth: 320, maxWidth: 400, boxShadow: '2px 0 8px #0008', zIndex: 2}}>
+        <div className="mb-4">
+          <h2 className="mb-1">LEO Decisions</h2>
+          <span className="badge bg-primary me-2">Turno {state.turn}/{state.maxTurns}</span>
+          <button className="btn btn-outline-danger btn-sm float-end" onClick={onExit}>Salir</button>
+          <p className="text-muted mt-2" style={{fontSize: '13px'}}>{getScenarioDescription()}</p>
         </div>
-      </div>
-
-      {state.turn > state.maxTurns ? (
-        <GameSummary state={state} onDownloadReport={downloadReport} />
-      ) : (
-        <div className="row">
-          <div className="col-lg-7">
-            <MapView state={state} />
-            {state.aoi && <NDVIChart ndviSeries={state.aoi.ndviSeries || []} name={state.aoi.name} currentTurn={state.turn - 1} />}
-          </div>
-          <div className="col-lg-5">
+        {state.turn > state.maxTurns ? (
+          <GameSummary state={state} onDownloadReport={downloadReport} />
+        ) : (
+          <>
             <Scoreboard state={state} />
             <EventLog events={state.history} />
             <TurnPanel state={state} onStep={step} />
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </div>
+
+      {/* Panel Derecho: Mundo 3D interactivo */}
+      <div className="flex-grow-1 position-relative" style={{minWidth: 0, background: '#000'}}>
+        <SatelliteTracker3D />
+      </div>
     </div>
   );
 }
