@@ -1,0 +1,1 @@
+[COPY FROM client/dist/assets/index-COrD1fMz.js]
